@@ -707,6 +707,18 @@
                         <div class="metric-value" id="latest-docmrr">-</div>
                         <div class="metric-label">Doc MRR</div>
                     </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="latest-precision1">-</div>
+                        <div class="metric-label">Precision@1</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="latest-precision3">-</div>
+                        <div class="metric-label">Precision@3</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="latest-precision5">-</div>
+                        <div class="metric-label">Precision@5</div>
+                    </div>
                 </div>
             </div>
 
@@ -806,6 +818,9 @@
                             <th>Source</th>
                             <th>MRR</th>
                             <th>Recall@5</th>
+                            <th>P@1</th>
+                            <th>P@3</th>
+                            <th>P@5</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -949,6 +964,14 @@
                             <div class="run-metric-value">${formatPercent(run.aggregateMetrics.ndcg)}</div>
                             <div class="run-metric-label">nDCG</div>
                         </div>
+                        <div class="run-metric">
+                            <div class="run-metric-value">${formatPercent(run.aggregateMetrics.precision_at_1)}</div>
+                            <div class="run-metric-label">P@1</div>
+                        </div>
+                        <div class="run-metric">
+                            <div class="run-metric-value">${formatPercent(run.aggregateMetrics.precision_at_5)}</div>
+                            <div class="run-metric-label">P@5</div>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -971,6 +994,9 @@
             document.getElementById('latest-recall5').textContent = formatPercent(latest.aggregateMetrics.recall_at_5);
             document.getElementById('latest-recall10').textContent = formatPercent(latest.aggregateMetrics.recall_at_10);
             document.getElementById('latest-docmrr').textContent = formatPercent(latest.aggregateMetrics.docMrr);
+            document.getElementById('latest-precision1').textContent = formatPercent(latest.aggregateMetrics.precision_at_1);
+            document.getElementById('latest-precision3').textContent = formatPercent(latest.aggregateMetrics.precision_at_3);
+            document.getElementById('latest-precision5').textContent = formatPercent(latest.aggregateMetrics.precision_at_5);
         }
 
         // Populate select dropdowns
@@ -1057,6 +1083,18 @@
                         <div class="metric-value">${formatPercent(metrics.recall_at_5)}</div>
                         <div class="metric-label">Recall@5</div>
                     </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${formatPercent(metrics.precision_at_1)}</div>
+                        <div class="metric-label">Precision@1</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${formatPercent(metrics.precision_at_3)}</div>
+                        <div class="metric-label">Precision@3</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${formatPercent(metrics.precision_at_5)}</div>
+                        <div class="metric-label">Precision@5</div>
+                    </div>
                 </div>
             `;
         }
@@ -1064,7 +1102,7 @@
         // Render delta cards
         function renderDeltas(deltas) {
             const container = document.getElementById('compare-deltas');
-            const metrics = ['mrr', 'ndcg', 'recall_at_1', 'recall_at_5', 'recall_at_10'];
+            const metrics = ['mrr', 'ndcg', 'recall_at_1', 'recall_at_5', 'recall_at_10', 'precision_at_1', 'precision_at_3', 'precision_at_5'];
 
             container.innerHTML = metrics.map(key => {
                 const delta = deltas[key];
@@ -1100,7 +1138,7 @@
             typeContainer.innerHTML = Object.entries(currentRun.metricsByType).map(([type, metrics]) => `
                 <div class="breakdown-item">
                     <span class="breakdown-name">${type} (${metrics.count})</span>
-                    <span class="breakdown-value">${formatPercent(metrics.recall_at_5)}</span>
+                    <span class="breakdown-value">R@5: ${formatPercent(metrics.recall_at_5)} · P@1: ${formatPercent(metrics.precision_at_1)} · P@5: ${formatPercent(metrics.precision_at_5)}</span>
                 </div>
             `).join('');
 
@@ -1109,7 +1147,7 @@
             sourceContainer.innerHTML = Object.entries(currentRun.metricsBySource).map(([source, metrics]) => `
                 <div class="breakdown-item">
                     <span class="breakdown-name">${source} (${metrics.count})</span>
-                    <span class="breakdown-value">${formatPercent(metrics.recall_at_5)}</span>
+                    <span class="breakdown-value">R@5: ${formatPercent(metrics.recall_at_5)} · P@1: ${formatPercent(metrics.precision_at_1)} · P@5: ${formatPercent(metrics.precision_at_5)}</span>
                 </div>
             `).join('');
 
@@ -1176,6 +1214,9 @@
                         <td>${result.querySource || '-'}</td>
                         <td>${formatPercent(result.metrics.mrr)}</td>
                         <td>${formatPercent(result.metrics.recall_at_5)}</td>
+                        <td>${formatPercent(result.metrics.precision_at_1)}</td>
+                        <td>${formatPercent(result.metrics.precision_at_3)}</td>
+                        <td>${formatPercent(result.metrics.precision_at_5)}</td>
                         <td>${statusBadge}</td>
                     </tr>
                 `;
@@ -1268,6 +1309,10 @@
                 <div class="modal-metric">
                     <div class="modal-metric-value">${formatPercent(m.precision_at_1)}</div>
                     <div class="modal-metric-label">Precision@1</div>
+                </div>
+                <div class="modal-metric">
+                    <div class="modal-metric-value">${formatPercent(m.precision_at_3)}</div>
+                    <div class="modal-metric-label">Precision@3</div>
                 </div>
                 <div class="modal-metric">
                     <div class="modal-metric-value">${formatPercent(m.precision_at_5)}</div>
