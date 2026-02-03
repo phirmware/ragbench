@@ -4,6 +4,10 @@ A benchmarking framework for evaluating Retrieval-Augmented Generation (RAG) pip
 
 Test different embedding models, chunking strategies, and retrieval configurations against 3,045 real-world questions from academic papers.
 
+## Demo
+
+![RAGBench Dashboard Demo](static/ragbench-demo.gif)
+
 ## Features
 
 - **Standardized Evaluation**: Uses the Vectara Open RAGBench dataset (397 arXiv papers, 3,045 questions)
